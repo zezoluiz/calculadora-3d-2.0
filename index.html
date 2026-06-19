@@ -189,6 +189,8 @@
   .inv-footer { margin-top: 40px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 20px; }
 
   /* ================= PWA & MOBILE FIXES ================= */
+  @media (max-width: 1100px) { .calc-grid { grid-template-columns: 1fr; } .result-panel { position: static; margin-top: 24px; } .sales-grid { grid-template-columns: 1fr; } }
+  
   @media (max-width: 1024px) {
     .app { flex-direction: column; width: 100%; }
     .calc-grid { grid-template-columns: 1fr; }
@@ -197,19 +199,22 @@
   
     .mobile-header { display: flex; width: 100%; }
     
-    .sidebar { width: 100%; height: auto; top: auto; bottom: 0; flex-direction: row; border-right: none; border-top: 1px solid rgba(255,255,255,0.05); padding: 0; align-items: center; justify-content: space-around; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
+    /* Barra inferior (Bottom Nav) corrigida e distribuída perfeitamente */
+    .sidebar { width: 100%; height: auto; top: auto; bottom: 0; flex-direction: row; border-right: none; border-top: 1px solid rgba(255,255,255,0.05); padding: 0; align-items: center; justify-content: space-between; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
     
-    .logo, .sidebar-bottom span:not(.icon) { display: none; }
-    .nav { display: flex; flex-direction: row; padding: 0; margin: 0; width: 100%; justify-content: space-evenly; overflow: visible; }
-    .nav-section { display: contents; } .nav-label { display: none; }
-    .nav-item { flex-direction: column; gap: 4px; padding: 10px 0; margin: 0; justify-content: center; flex: 1; border-radius: 0; }
+    .logo, .nav-label { display: none; }
+    .nav, .nav-section, .sidebar-bottom { display: contents; } /* Liberta os itens para ocuparem a .sidebar diretamente */
+    
+    .nav-item, .config-btn { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; margin: 0; align-items: center; justify-content: center; flex: 1; border-radius: 0; position: relative; }
     .nav-item.active { box-shadow: none; background: transparent; color: var(--orange-light); }
-    .nav-item .icon { font-size: 24px; margin-bottom: 2px; transition: transform 0.2s; } 
+    .nav-item .icon, .config-btn .icon { font-size: 22px; margin-bottom: 2px; transition: transform 0.2s; } 
     .nav-item.active .icon { transform: translateY(-2px); }
-    .nav-item span:not(.icon) { font-size: 10px; display: block; font-weight: 600; }
-    .sidebar-bottom { border-top: none; padding: 0; display: contents; }
-    .config-btn { flex-direction: column; gap: 4px; padding: 10px 0; margin: 0; justify-content: center; flex: 1; border-radius: 0; }
-    .config-btn .icon { font-size: 24px; } .config-btn span:not(.icon) { font-size: 10px; display: block; font-weight: 600; }
+    
+    /* Textos dos botões unificados */
+    .nav-item span:not(.icon):not(.nav-badge), .config-btn span:not(.icon) { font-size: 10px; display: block; font-weight: 600; text-align: center; line-height: 1; }
+    
+    /* Badge de contagem absolutamente posicionado para não quebrar layout */
+    .nav-badge { position: absolute; top: 4px; left: 50%; transform: translateX(4px); margin: 0; padding: 2px 5px; font-size: 9px; line-height: 1; border-radius: 10px; }
 
     .main { margin-left: 0; padding: 16px; padding-bottom: calc(100px + env(safe-area-inset-bottom)); width: 100%; }
     .page-header { margin-bottom: 24px; text-align: center; } .page-title { font-size: 24px; } .card { padding: 20px; }
