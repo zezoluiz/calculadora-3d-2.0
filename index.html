@@ -7,7 +7,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Amorah3D">
-<!-- PWA Manifest dinâmico gerado via JS -->
 <link id="pwa-manifest" rel="manifest" href="">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230f172a'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-weight='800' font-size='200' fill='%233b82f6'%3EA3D%3C/text%3E%3C/svg%3E">
 
@@ -32,7 +31,11 @@
   body { background: var(--bg-base); color: var(--text-primary); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; background-image: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.03) 0%, transparent 50%); background-attachment: fixed; }
   body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: -1; }
 
-  /* ================= LAYOUT ================= */
+  /* ================= LAYOUT & LOGIN ================= */
+  #login-screen { position: fixed; inset: 0; background: var(--bg-base); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+  .google-btn { display: flex; align-items: center; gap: 12px; background: #fff; color: #333; padding: 14px 28px; border-radius: 8px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s; margin-top: 32px; }
+  .google-btn:active { transform: scale(0.96); }
+
   .app { display: flex; min-height: 100vh; position: relative; }
   .sidebar { width: 260px; background: rgba(18, 18, 20, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; }
   .main { margin-left: 260px; flex: 1; padding: 40px; min-height: 100vh; max-width: 1400px; }
@@ -150,7 +153,6 @@
   .toast.success .t-icon { color: var(--teal); font-size: 20px; }
   .toast.error .t-icon { color: var(--red); font-size: 20px; }
   
-  /* ================= LISTAS E CARDS ================= */
   .models-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
   .model-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; }
   .model-thumb { width: calc(100% + 48px); height: 160px; object-fit: cover; border-radius: var(--radius-lg) var(--radius-lg) 0 0; display: block; margin: -24px -24px 20px -24px; border-bottom: 1px solid var(--border); }
@@ -189,8 +191,6 @@
   .inv-footer { margin-top: 40px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 20px; }
 
   /* ================= PWA & MOBILE FIXES ================= */
-  @media (max-width: 1100px) { .calc-grid { grid-template-columns: 1fr; } .result-panel { position: static; margin-top: 24px; } .sales-grid { grid-template-columns: 1fr; } }
-  
   @media (max-width: 1024px) {
     .app { flex-direction: column; width: 100%; }
     .calc-grid { grid-template-columns: 1fr; }
@@ -199,28 +199,23 @@
   
     .mobile-header { display: flex; width: 100%; }
     
-    /* Barra inferior (Bottom Nav) corrigida e distribuída perfeitamente */
     .sidebar { width: 100%; height: auto; top: auto; bottom: 0; flex-direction: row; border-right: none; border-top: 1px solid rgba(255,255,255,0.05); padding: 0; align-items: center; justify-content: space-between; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
     
     .logo, .nav-label { display: none; }
-    .nav, .nav-section, .sidebar-bottom { display: contents; } /* Liberta os itens para ocuparem a .sidebar diretamente */
+    .nav, .nav-section, .sidebar-bottom { display: contents; } 
     
     .nav-item, .config-btn { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; margin: 0; align-items: center; justify-content: center; flex: 1; border-radius: 0; position: relative; }
     .nav-item.active { box-shadow: none; background: transparent; color: var(--orange-light); }
-    .nav-item .icon, .config-btn .icon { font-size: 22px; margin-bottom: 2px; transition: transform 0.2s; } 
+    .nav-item .icon, .config-btn .icon { font-size: 24px; margin-bottom: 2px; transition: transform 0.2s; } 
     .nav-item.active .icon { transform: translateY(-2px); }
     
-    /* Textos dos botões unificados */
     .nav-item span:not(.icon):not(.nav-badge), .config-btn span:not(.icon) { font-size: 10px; display: block; font-weight: 600; text-align: center; line-height: 1; }
-    
-    /* Badge de contagem absolutamente posicionado para não quebrar layout */
     .nav-badge { position: absolute; top: 4px; left: 50%; transform: translateX(4px); margin: 0; padding: 2px 5px; font-size: 9px; line-height: 1; border-radius: 10px; }
 
     .main { margin-left: 0; padding: 16px; padding-bottom: calc(100px + env(safe-area-inset-bottom)); width: 100%; }
     .page-header { margin-bottom: 24px; text-align: center; } .page-title { font-size: 24px; } .card { padding: 20px; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; } .stat-card { padding: 16px; } .stat-value { font-size: 24px; } .stat-label { font-size: 9px; letter-spacing: 1px; }
     
-    /* Layout Vertical Mobile */
     .field-group, .field-group.triple { display: grid; grid-template-columns: 1fr; gap: 16px; }
     .models-grid { grid-template-columns: 1fr; gap: 16px; } .model-thumb, .model-thumb-placeholder { width: calc(100% + 40px); margin: -20px -20px 16px -20px; }
     
@@ -240,6 +235,18 @@
 </style>
 </head>
 <body>
+
+<!-- Tela de Login -->
+<div id="login-screen">
+  <div class="logo-text" style="font-size: 48px; margin-bottom: 8px;">Amorah<span>3D</span></div>
+  <p style="color:var(--text-secondary); font-size: 16px; margin-bottom: 32px;">Cloud Manager</p>
+  
+  <button class="google-btn" onclick="window.loginWithGoogle()">
+    <svg style="width:24px;height:24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+    Entrar com o Google
+  </button>
+  <p style="color:var(--text-tertiary); margin-top:24px; font-size:14px; max-width: 300px; line-height: 1.5;">Faça login de forma segura para aceder à sua biblioteca 3D partilhada com a equipa.</p>
+</div>
 
 <!-- PDF Template -->
 <div id="invoice-template">
@@ -392,7 +399,7 @@
           </div>
 
           <div class="btn-row">
-            <button class="btn btn-primary" onclick="saveModel()">💾 Salvar Nuvem</button>
+            <button class="btn btn-primary" onclick="saveModel()">💾 Salvar na Nuvem</button>
             <button class="btn btn-ghost" onclick="clearCalc()">↺ Limpar</button>
           </div>
         </div>
@@ -423,7 +430,7 @@
     </div>
 
     <div class="page" id="page-models">
-      <div class="page-header"><div class="page-title">Sua Biblioteca</div></div>
+      <div class="page-header"><div class="page-title">Sua Biblioteca Partilhada</div></div>
       <div class="card" style="margin-bottom: 24px; display:flex; gap:12px; flex-wrap:wrap; padding: 16px;">
         <input type="text" class="std-input" style="flex:1; min-width: 200px;" id="model-search" placeholder="Buscar..." oninput="renderModels()">
         <select id="model-filter-cat" class="std-input" style="width:auto;" onchange="renderModels()"><option value="">Todas</option><option value="miniatura">Miniaturas</option><option value="funcional">Funcionais</option><option value="decorativo">Decorativos</option></select>
@@ -452,12 +459,15 @@
     </div>
 
     <div class="page" id="page-config">
-      <div class="page-header"><div class="page-title">Configurações</div></div>
+      <div class="page-header"><div class="page-title">Configurações Gerais</div></div>
       <div class="card" style="max-width: 720px;">
         <div class="field-group"><div class="field"><label>KWh Padrão</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="cfg-kwh" step="0.01"></div></div><div class="field"><label>Potência Média</label><div class="input-with-unit"><input type="number" id="cfg-watts" step="10"><span class="unit">W</span></div></div></div>
         <div class="field-group"><div class="field"><label>Valor Impressora</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="cfg-printer-val" step="100"></div></div><div class="field"><label>Sua Hora</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="cfg-labor" step="1"></div></div></div>
         <div class="field-group"><div class="field"><label>Margem Padrão (%)</label><div class="input-with-unit"><input type="number" id="cfg-margin" step="5"><span class="unit">%</span></div></div><div class="field"><label>Manutenção (Mês)</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="cfg-maint" step="5"></div></div></div>
-        <div class="btn-row"><button class="btn btn-primary" onclick="saveConfig()">Salvar na Nuvem</button></div>
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveConfig()">Salvar na Nuvem</button>
+            <button class="btn btn-ghost" onclick="window.logout()">Sair da Conta</button>
+        </div>
       </div>
     </div>
   </main>
@@ -488,7 +498,7 @@ const manifestJSON = { "name": "Amorah 3DCalc", "short_name": "Amorah3D", "start
 document.querySelector('#pwa-manifest').setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifestJSON)));
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 const firebaseConfig = { apiKey: "AIzaSyDeItrSCFf8ZcCnwoop-3hHGXssTjGobpQ", authDomain: "amorah-3dcalc.firebaseapp.com", projectId: "amorah-3dcalc", storageBucket: "amorah-3dcalc.firebasestorage.app", messagingSenderId: "819934473316", appId: "1:819934473316:web:bdb46e7c9d5bb60b6a4371" };
@@ -506,6 +516,7 @@ if (typeof __firebase_config !== 'undefined') {
 const app = initializeApp(finalConfig); 
 const auth = getAuth(app); 
 const db = getFirestore(app); 
+const provider = new GoogleAuthProvider();
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'amorah-3dcalc';
 let userId = null;
 
@@ -520,24 +531,52 @@ const id = v => document.getElementById(v);
 
 window.fmt = fmt; window.fmtShort = fmtShort; window.fmtDate = fmtDate; window.num = num; window.id = id;
 
+window.loginWithGoogle = async () => {
+    try {
+        await signInWithPopup(auth, provider);
+    } catch(e) {
+        window.showToast("Erro ao fazer login.", "error");
+        console.error(e);
+    }
+};
+
+window.logout = async () => {
+    await signOut(auth);
+    window.location.reload();
+}
+
 const initAuth = async () => { 
   try { 
     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token && isPreview) {
       await signInWithCustomToken(auth, __initial_auth_token);
     } else {
-      await signInAnonymously(auth); 
+      // Deixa a tela de login nativa do Google aparecer
     }
   } catch(e) { console.error("Auth error:", e); hideLoader(); } 
 };
 
-onAuthStateChanged(auth, (user) => { if (user) { userId = user.uid; setupFirestoreListeners(); } });
+onAuthStateChanged(auth, (user) => { 
+  if (user) { 
+    userId = user.uid; 
+    document.getElementById('login-screen').style.display = 'none';
+    setupFirestoreListeners(); 
+  } else {
+    userId = null;
+    hideLoader();
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('main-app-container').style.display = 'none';
+  }
+});
 
 function setupFirestoreListeners() {
   if (!userId) return;
-  onSnapshot(collection(db, 'artifacts', appId, 'users', userId, 'models'), (snap) => { window.models = snap.docs.map(d => d.data()).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)); id('badge-models').textContent = window.models.length; window.renderModels(); window.renderDashboard(); populateSaleSelect(); hideLoader(); }, (err) => { console.error(err); hideLoader(); });
-  onSnapshot(collection(db, 'artifacts', appId, 'users', userId, 'sales'), (snap) => { window.sales = snap.docs.map(d => d.data()).sort((a,b) => new Date(b.date) - new Date(a.date)); window.renderSales(); window.renderDashboard(); }, (err) => console.error(err));
-  onSnapshot(doc(db, 'artifacts', appId, 'users', userId, 'config', 'settings'), (docSnap) => { if (docSnap.exists()) window.config = { ...window.config, ...docSnap.data() }; applyConfigToCalc(); window.loadConfig(); }, (err) => console.error(err));
+  
+  // SHARED WORKSPACE PATHS -> 'public/data/...'
+  onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'models'), (snap) => { window.models = snap.docs.map(d => d.data()).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)); id('badge-models').textContent = window.models.length; window.renderModels(); window.renderDashboard(); populateSaleSelect(); hideLoader(); }, (err) => { console.error(err); hideLoader(); });
+  onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sales'), (snap) => { window.sales = snap.docs.map(d => d.data()).sort((a,b) => new Date(b.date) - new Date(a.date)); window.renderSales(); window.renderDashboard(); }, (err) => console.error(err));
+  onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'config', 'settings'), (docSnap) => { if (docSnap.exists()) window.config = { ...window.config, ...docSnap.data() }; applyConfigToCalc(); window.loadConfig(); }, (err) => console.error(err));
 }
+
 function hideLoader() { const l = id('app-loader'); if(l) { l.style.opacity = '0'; setTimeout(() => l.style.display = 'none', 500); } id('main-app-container').style.display = 'flex'; }
 initAuth();
 
@@ -579,11 +618,13 @@ window.generatePDF = function() {
 }
 
 window.clearCalc = function() { ['c-name','c-desc','c-link'].forEach(f => { if(id(f)) id(f).value = ''; }); id('c-photo-preview').style.display = 'none'; id('photo-upload-area').classList.remove('has-photo'); id('photo-remove-btn').style.display='none'; id('photo-upload-placeholder').style.display='flex'; currentPhoto = null; applyConfigToCalc(); }
+
+// ALL CRUD OPERATIONS CHANGED TO PUBLIC NAMESPACE FOR SHARED WORKSPACE
 window.saveModel = async function() {
   if (!userId) return window.showToast('Aguarde...', 'error'); const name = id('c-name').value.trim(); if (!name) return window.showToast('Falta nome!', 'error');
   const costs = window.calcCost(); const modelId = Date.now().toString();
   const model = { id: parseInt(modelId), name, cat: id('c-cat').value, desc: id('c-desc').value, filType: id('c-fil-type').value, photo: currentPhoto, cost: costs.total, suggestedPrice: costs.suggestedPrice, weight: num('c-weight'), time: num('c-time'), createdAt: new Date().toISOString(), params: { weight: num('c-weight'), filPrice: num('c-fil-price'), filType: id('c-fil-type').value, fail: num('c-fail'), support: num('c-support'), time: num('c-time'), watts: num('c-watts'), kwh: num('c-kwh'), laborTime: num('c-labor-time'), laborRate: num('c-labor-rate'), pack: num('c-pack'), extra: num('c-extra'), printerVal: num('c-printer-val'), printerLife: num('c-printer-life'), maint: num('c-maint'), margin: num('c-margin') } };
-  try { await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'models', modelId), model); window.showToast('Salvo!', 'success'); window.navigate('models'); } catch (e) { window.showToast('Erro', 'error'); console.error(e); }
+  try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'models', modelId), model); window.showToast('Salvo partilhado!', 'success'); window.navigate('models'); } catch (e) { window.showToast('Erro', 'error'); console.error(e); }
 }
 
 window.renderModels = function() {
@@ -593,19 +634,19 @@ window.renderModels = function() {
   id('models-grid').innerHTML = list.map(m => `<div class="model-card">${m.photo ? `<img class="model-thumb" src="${m.photo}">` : `<div class="model-thumb-placeholder">🧊</div>`}<div style="font-weight:700;font-size:16px;margin-bottom:12px;display:flex;justify-content:space-between"><span>${m.name}</span><button class="btn-ghost btn-sm" style="padding:4px" onclick="openEditModal(${m.id})">✏️</button></div><div style="display:flex;gap:12px;margin-bottom:16px"><div style="flex:1;background:var(--bg-elevated);padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:var(--text-secondary)">Custo</div><b>${fmt(m.cost)}</b></div><div style="flex:1;background:var(--teal-glow);color:var(--teal);padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px">Venda</div><b>${fmt(m.suggestedPrice)}</b></div></div><div style="display:flex;gap:8px;margin-top:auto"><button class="btn btn-primary btn-sm" style="flex:1" onclick="loadModel(${m.id})">Abrir na Calc</button><button class="btn btn-danger btn-sm" onclick="deleteModel(${m.id})">🗑</button></div></div>`).join('');
 }
 window.openEditModal = function(mid) { const m = window.models.find(x => x.id === mid); if (!m) return; id('edit-id').value = m.id; id('edit-name').value = m.name; id('edit-cat').value = m.cat; id('edit-cost').value = m.cost.toFixed(2); id('edit-price').value = m.suggestedPrice.toFixed(2); if (m.photo) { id('edit-photo-preview').src = m.photo; id('edit-photo-preview').style.display = 'block'; id('edit-photo-area').classList.add('has-photo'); id('edit-photo-placeholder').style.display = 'none'; id('edit-photo-remove').style.display = 'block'; editCurrentPhoto = m.photo; } else { id('edit-photo-preview').src = ''; id('edit-photo-preview').style.display = 'none'; id('edit-photo-area').classList.remove('has-photo'); id('edit-photo-placeholder').style.display = 'flex'; id('edit-photo-remove').style.display = 'none'; editCurrentPhoto = null; } id('modal-edit').classList.add('open'); }
-window.saveEdit = async function() { if (!userId) return; const mid = parseInt(id('edit-id').value); const m = window.models.find(x => x.id === mid); if (!m) return; const um = { ...m, name: id('edit-name').value.trim() || m.name, cat: id('edit-cat').value, cost: parseFloat(id('edit-cost').value) || m.cost, suggestedPrice: parseFloat(id('edit-price').value) || m.suggestedPrice, photo: editCurrentPhoto }; try { await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'models', mid.toString()), um); window.closeModal('modal-edit'); window.showToast('Atualizado!', 'success'); } catch(e) { window.showToast('Erro', 'error'); console.error(e); } }
+window.saveEdit = async function() { if (!userId) return; const mid = parseInt(id('edit-id').value); const m = window.models.find(x => x.id === mid); if (!m) return; const um = { ...m, name: id('edit-name').value.trim() || m.name, cat: id('edit-cat').value, cost: parseFloat(id('edit-cost').value) || m.cost, suggestedPrice: parseFloat(id('edit-price').value) || m.suggestedPrice, photo: editCurrentPhoto }; try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'models', mid.toString()), um); window.closeModal('modal-edit'); window.showToast('Atualizado!', 'success'); } catch(e) { window.showToast('Erro', 'error'); console.error(e); } }
 window.loadModel = function(mid) { const m = window.models.find(x => x.id === mid); if (!m || !m.params) return; id('c-name').value = m.name; id('c-cat').value = m.cat; id('c-weight').value = m.params.weight; id('c-time').value = m.params.time; id('c-margin').value = m.params.margin; if(m.photo){ id('c-photo-preview').src = m.photo; id('c-photo-preview').style.display = 'block'; id('photo-upload-area').classList.add('has-photo'); id('photo-upload-placeholder').style.display='none'; id('photo-remove-btn').style.display='block'; currentPhoto = m.photo; } window.navigate('calc'); window.calcCost(); }
-window.deleteModel = async function(mid) { if (!userId || !confirm('Excluir?')) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'models', mid.toString())); window.showToast('Removido.', 'success'); } catch(e) { console.error(e); } }
+window.deleteModel = async function(mid) { if (!userId || !confirm('Excluir de todos os dispositivos?')) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'models', mid.toString())); window.showToast('Removido.', 'success'); } catch(e) { console.error(e); } }
 
 function populateSaleSelect() { const sel = id('s-model'); sel.innerHTML = window.models.length ? window.models.map(m => `<option value="${m.id}">${m.name}</option>`).join('') : '<option value="">Sem modelos</option>'; if (window.models.length > 0) id('s-price').value = window.models[0].suggestedPrice.toFixed(2); sel.onchange = () => { const m = window.models.find(x => x.id == sel.value); if (m) { id('s-price').value = m.suggestedPrice.toFixed(2); window.updateSalePreview(); } }; }
 window.updateSalePreview = function() { const m = window.models.find(x => x.id == id('s-model')?.value); const q = num('s-qty'); const p = num('s-price'); if (!m) return; id('sp-revenue').textContent = fmt(p*q); id('sp-cost').textContent = fmt(m.cost*q); id('sp-profit').textContent = fmt((p-m.cost)*q); id('sale-preview').style.display = 'block'; }
-window.registerSale = async function() { if (!userId) return; const mId = id('s-model')?.value; if(!mId) return; const m = window.models.find(x => x.id == mId); const q = num('s-qty'); const p = num('s-price'); const sale = { id: Date.now(), modelId: mId, modelName: m.name, qty: q, price: p, date: id('s-date').value, channel: id('s-channel').value, cost: m.cost, profit: (p-m.cost)*q, revenue: p*q }; try { await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'sales', sale.id.toString()), sale); window.showToast('Venda Registrada!', 'success'); } catch(e) { console.error(e); } }
+window.registerSale = async function() { if (!userId) return; const mId = id('s-model')?.value; if(!mId) return; const m = window.models.find(x => x.id == mId); const q = num('s-qty'); const p = num('s-price'); const sale = { id: Date.now(), modelId: mId, modelName: m.name, qty: q, price: p, date: id('s-date').value, channel: id('s-channel').value, cost: m.cost, profit: (p-m.cost)*q, revenue: p*q }; try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sales', sale.id.toString()), sale); window.showToast('Venda Registrada!', 'success'); } catch(e) { console.error(e); } }
 window.renderSales = function() { if (window.sales.length === 0) { id('sales-table-wrap').innerHTML = `<div class="empty-state">Sem vendas.</div>`; return; } id('sales-table-wrap').innerHTML = `<div class="sales-list">${window.sales.map(s => `<div class="sale-card"><div class="sc-header"><div class="sc-date">${fmtDate(s.date)}</div><div class="chip chip-orange">${s.channel}</div></div><div class="sc-title">${s.modelName} <span class="sc-qty">x${s.qty}</span></div><div class="sc-finance"><div><small>Receita</small><b>${fmt(s.revenue)}</b></div><div style="text-align:right"><small>Lucro</small><b class="${s.profit>=0?'td-green':'td-red'}">${s.profit>=0?'+':''}${fmt(s.profit)}</b></div></div><button class="btn btn-ghost btn-sm" style="width:100%; margin-top:8px" onclick="deleteSale(${s.id})">Anular</button></div>`).join('')}</div>`; }
-window.deleteSale = async function(saleId) { if (!userId || !confirm('Remover venda?')) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'sales', saleId.toString())); window.showToast('Removido.', 'success'); } catch(e) { console.error(e); } }
+window.deleteSale = async function(saleId) { if (!userId || !confirm('Remover venda?')) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sales', saleId.toString())); window.showToast('Removido.', 'success'); } catch(e) { console.error(e); } }
 
 window.renderDashboard = function() { id('dash-models').textContent = window.models.length; id('dash-revenue').textContent = fmtShort(window.sales.reduce((a, s) => a + s.revenue, 0)); id('dash-profit').textContent = fmtShort(window.sales.reduce((a, s) => a + s.profit, 0)); id('dash-units').textContent = window.sales.reduce((a, s) => a + s.qty, 0); const rec = window.sales.slice(0, 5); id('dash-sales-list').innerHTML = rec.length ? rec.map(s => `<div style="padding:16px; margin-bottom:12px; border-radius:var(--radius-md); background:var(--bg-elevated); border:1px solid var(--border); display:flex; justify-content:space-between"><div><b style="font-size:15px">${s.modelName}</b> (x${s.qty})<div style="font-size:12px;color:var(--text-tertiary);margin-top:4px">${fmtDate(s.date)}</div></div><b style="color:var(--teal)">${fmt(s.revenue)}</b></div>`).join('') : '<div class="empty-state">Sem vendas</div>'; }
 window.loadConfig = function() { id('cfg-kwh').value = window.config.kwh; id('cfg-watts').value = window.config.watts; id('cfg-printer-val').value = window.config.printerVal; id('cfg-labor').value = window.config.labor; id('cfg-maint').value = window.config.maint; id('cfg-margin').value = window.config.margin; }
-window.saveConfig = async function() { if(!userId) return; const cfg = { kwh: num('cfg-kwh'), watts: num('cfg-watts'), printerVal: num('cfg-printer-val'), printerLife: 2000, labor: num('cfg-labor'), maint: num('cfg-maint'), margin: num('cfg-margin'), fail: 5 }; try { await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'config', 'settings'), cfg); window.showToast('Configurações Salvas', 'success'); } catch(e) { console.error(e); } }
+window.saveConfig = async function() { if(!userId) return; const cfg = { kwh: num('cfg-kwh'), watts: num('cfg-watts'), printerVal: num('cfg-printer-val'), printerLife: 2000, labor: num('cfg-labor'), maint: num('cfg-maint'), margin: num('cfg-margin'), fail: 5 }; try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'config', 'settings'), cfg); window.showToast('Configurações Salvas', 'success'); } catch(e) { console.error(e); } }
 function applyConfigToCalc() { id('c-kwh').value = window.config.kwh; id('c-watts').value = window.config.watts; id('c-printer-val').value = window.config.printerVal; id('c-labor-rate').value = window.config.labor; id('c-margin').value = window.config.margin; window.calcCost(); }
 
 function handleImg(input, callback) {
