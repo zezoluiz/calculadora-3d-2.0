@@ -98,6 +98,10 @@
   body.light-mode::before { opacity: 0.5; } /* Menos ruído no modo claro */
 
   /* ================= LAYOUT ================= */
+  #login-screen { position: fixed; inset: 0; background: var(--bg-base); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+  .google-btn { display: flex; align-items: center; gap: 12px; background: #fff; color: #333; padding: 14px 28px; border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s; margin-top: 32px; }
+  .google-btn:active { transform: scale(0.96); }
+
   .app { display: flex; min-height: 100vh; position: relative; }
   .sidebar { width: 260px; background: var(--nav-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; transition: background 0.3s ease, border-color 0.3s ease; }
   .main { margin-left: 260px; flex: 1; padding: 40px; min-height: 100vh; max-width: 1400px; }
@@ -329,6 +333,19 @@
 </head>
 <body>
 
+<!-- Tela de Login -->
+<div id="login-screen">
+  <img src="Amorah Logo.jpg" alt="Amorah Doceria" style="max-width: 200px; margin-bottom: 24px; border-radius: 12px; box-shadow: var(--shadow-md);">
+  <h2 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 28px; color: var(--text-primary);">Acesso Restrito</h2>
+  <p style="color:var(--text-secondary); font-size: 16px; margin-top: 8px;">Calculadora Amorah Personalizados</p>
+  
+  <button class="google-btn" onclick="window.loginWithGoogle()">
+    <svg style="width:24px;height:24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+    Entrar com o Google
+  </button>
+  <p style="color:var(--text-tertiary); margin-top:24px; font-size:13px; max-width: 300px; line-height: 1.5;">Apenas contas autorizadas têm acesso à base de dados.</p>
+</div>
+
 <!-- PDF Template -->
 <div id="invoice-template">
   <div class="inv-header">
@@ -368,16 +385,10 @@
 <div id="app-loader"><div class="spinner"></div><div style="font-family:'Outfit'; font-weight:700; color:var(--text-secondary)">Acessando Nuvem...</div></div>
 
 <div class="app" style="display:none;" id="main-app-container">
-  <div class="mobile-header">
-    <img src="Amorah Logo.jpg" alt="Amorah Doceria" class="mobile-logo-img">
-    <button class="mobile-theme-toggle" onclick="toggleTheme()" id="mobile-theme-icon">🌙</button>
-  </div>
+  <div class="mobile-header"><div class="logo-text">Amorah<span>3D</span></div></div>
 
   <aside class="sidebar">
-    <div class="logo">
-      <img src="Amorah Logo.jpg" alt="Amorah Doceria" class="logo-img">
-      <div class="logo-sub">Cloud PWA Manager</div>
-    </div>
+    <div class="logo"><div class="logo-text">Amorah<span>3D</span></div><div class="logo-sub">Calculadora Amorah Personalizados</div></div>
     <nav class="nav">
       <div class="nav-section">
         <div class="nav-label">Principal</div>
@@ -561,7 +572,10 @@
         <div class="field-group"><div class="field"><label>KWh Padrão</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="cfg-kwh" step="0.01"></div></div><div class="field"><label>Potência Média</label><div class="input-with-unit"><input type="number" id="cfg-watts" step="10"><span class="unit">W</span></div></div></div>
         <div class="field-group"><div class="field"><label>Valor Impressora</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="cfg-printer-val" step="100"></div></div><div class="field"><label>Sua Hora</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="cfg-labor" step="1"></div></div></div>
         <div class="field-group"><div class="field"><label>Margem Padrão (%)</label><div class="input-with-unit"><input type="number" id="cfg-margin" step="5"><span class="unit">%</span></div></div><div class="field"><label>Manutenção (Mês)</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="cfg-maint" step="5"></div></div></div>
-        <div class="btn-row"><button class="btn btn-primary" onclick="saveConfig()">Salvar na Nuvem</button></div>
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveConfig()">Salvar na Nuvem</button>
+            <button class="btn btn-ghost" onclick="window.logout()">Sair / Logout</button>
+        </div>
       </div>
     </div>
   </main>
@@ -588,29 +602,23 @@
 </div>
 
 <script type="module">
+const manifestJSON = { "name": "Amorah 3DCalc", "short_name": "Amorah3D", "start_url": ".", "display": "standalone", "background_color": "#0f172a", "theme_color": "#0f172a", "orientation": "portrait", "icons": [{ "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230f172a'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-weight='800' font-size='200' fill='%233b82f6'%3EA3D%3C/text%3E%3C/svg%3E", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }] };
+document.querySelector('#pwa-manifest').setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifestJSON)));
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 const firebaseConfig = { apiKey: "AIzaSyDeItrSCFf8ZcCnwoop-3hHGXssTjGobpQ", authDomain: "amorah-3dcalc.firebaseapp.com", projectId: "amorah-3dcalc", storageBucket: "amorah-3dcalc.firebasestorage.app", messagingSenderId: "819934473316", appId: "1:819934473316:web:bdb46e7c9d5bb60b6a4371" };
 
-let isPreview = false;
-let finalConfig = firebaseConfig;
-
-if (typeof __firebase_config !== 'undefined') {
-  try {
-    finalConfig = JSON.parse(__firebase_config);
-    isPreview = true;
-  } catch(e) {}
-}
-
-const app = initializeApp(finalConfig); 
+const app = initializeApp(firebaseConfig); 
 const auth = getAuth(app); 
 const db = getFirestore(app); 
+const provider = new GoogleAuthProvider();
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'amorah-3dcalc';
 let userId = null;
 
-window.models = []; window.sales = []; window.config = { kwh: 0.85, watts: 120, printerVal: 2000, printerLife: 2000, labor: 30, maint: 50, margin: 30, fail: 5 };
+window.models = []; window.sales = []; window.config = { kwh: 0.85, watts: 120, printerVal: 2000, printerLife: 20000, labor: 30, maint: 50, margin: 30, fail: 5 };
 let currentPhoto = null; let editCurrentPhoto = null; window.currentCalcData = {};
 
 const fmt = v => 'R$ ' + Number(v).toFixed(2).replace('.', ',');
@@ -621,48 +629,36 @@ const id = v => document.getElementById(v);
 
 window.fmt = fmt; window.fmtShort = fmtShort; window.fmtDate = fmtDate; window.num = num; window.id = id;
 
-// Theme Logic
-function getSavedTheme() { return localStorage.getItem('amorah-theme') || 'dark'; }
-function saveTheme(theme) { localStorage.setItem('amorah-theme', theme); }
-function applyTheme(theme) {
-    if (theme === 'light') {
-        document.body.classList.add('light-mode');
-        document.getElementById('mobile-theme-icon').textContent = '☀️';
-        document.getElementById('desktop-theme-icon').textContent = '☀️';
-        document.getElementById('meta-theme-color').setAttribute('content', '#f8fafc');
-    } else {
-        document.body.classList.remove('light-mode');
-        document.getElementById('mobile-theme-icon').textContent = '🌙';
-        document.getElementById('desktop-theme-icon').textContent = '🌙';
-        document.getElementById('meta-theme-color').setAttribute('content', '#0f172a');
+window.loginWithGoogle = async () => {
+    try {
+        await signInWithPopup(auth, provider);
+    } catch(e) {
+        window.showToast("Erro ao conectar Google. Verifique se publicou a app no Netlify.", "error");
+        console.error(e);
     }
-}
-window.toggleTheme = function() {
-    const currentTheme = getSavedTheme();
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    saveTheme(newTheme);
-    applyTheme(newTheme);
-}
-// Apply on load
-applyTheme(getSavedTheme());
-
-
-const initAuth = async () => { 
-  try { 
-    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token && isPreview) {
-      try {
-        await signInWithCustomToken(auth, __initial_auth_token);
-      } catch (tokenError) {
-        console.warn("Falha no token customizado, usando anônimo.", tokenError);
-        await signInAnonymously(auth);
-      }
-    } else {
-      await signInAnonymously(auth); 
-    }
-  } catch(e) { console.error("Auth error:", e); hideLoader(); } 
 };
 
-onAuthStateChanged(auth, (user) => { if (user) { userId = user.uid; setupFirestoreListeners(); } });
+window.logout = async () => {
+    await signOut(auth);
+    window.location.reload();
+};
+
+const initAuth = async () => { 
+  hideLoader(); // Apenas esconde o loader para mostrar a tela de login ao iniciar
+};
+
+onAuthStateChanged(auth, (user) => { 
+  if (user) { 
+    userId = user.uid; 
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-app-container').style.display = 'flex';
+    setupFirestoreListeners(); 
+  } else {
+    userId = null;
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('main-app-container').style.display = 'none';
+  }
+});
 
 function setupFirestoreListeners() {
   if (!userId) return;
