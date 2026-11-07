@@ -8,7 +8,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Amorah3D">
 
-<link id="pwa-manifest" rel="manifest" href="">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230f172a'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-weight='800' font-size='200' fill='%23ec4899'%3EA3D%3C/text%3E%3C/svg%3E">
 
 <title>Amorah 3DCalc</title>
@@ -83,16 +82,16 @@
   /* ================= BOTÃO MODO CLARO/ESCURO ================= */
   .theme-toggle-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
   .theme-toggle-btn:hover { background: var(--bg-highlight); color: var(--text-primary); }
-  .mobile-theme-btn { width: auto; padding: 8px; border-radius: 50%; font-size: 18px; line-height: 1; border: none; background: var(--bg-elevated); color: var(--text-primary); }
+  .mobile-theme-btn { width: auto; padding: 8px; border-radius: 50%; font-size: 18px; line-height: 1; border: none; background: var(--bg-elevated); color: var(--text-primary); cursor: pointer; }
 
   /* ================= NAVEGAÇÃO ================= */
   .nav { padding: 12px 16px; flex: 1; overflow-y: auto; }
   .nav-section { margin-bottom: 24px; }
   .nav-label { font-size: 11px; color: var(--text-tertiary); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; padding: 0 12px; margin-bottom: 8px; font-weight: 500; }
   .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; font-size: 14px; font-weight: 500; color: var(--text-secondary); margin-bottom: 4px; }
-  .nav-item:hover { background: var(--bg-highlight); color: var(--text-primary); }
-  .nav-item.active { background: var(--orange-glow); color: var(--orange); box-shadow: inset 2px 0 0 var(--orange); }
-  .nav-item .icon { font-size: 18px; width: 22px; text-align: center; }
+  .nav-item:hover, .config-btn:hover { background: var(--bg-highlight); color: var(--text-primary); }
+  .nav-item.active, .config-btn.active { background: var(--orange-glow); color: var(--orange); box-shadow: inset 2px 0 0 var(--orange); }
+  .nav-item .icon, .config-btn .icon { font-size: 18px; width: 22px; text-align: center; }
   .nav-badge { margin-left: auto; background: var(--orange); color: var(--bg-base); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
   .sidebar-bottom { padding: 20px 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
   .config-btn { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-md); cursor: pointer; color: var(--text-secondary); font-size: 14px; font-weight: 500; transition: all 0.2s; }
@@ -243,7 +242,6 @@
   @media (max-width: 1024px) {
     .app { flex-direction: column; width: 100%; }
     
-    /* Cabeçalho mobile modificado com a logo e o botão de tema */
     .mobile-header { display: flex; width: 100%; }
     
     .sidebar { width: 100%; height: auto; top: auto; bottom: 0; flex-direction: row; border-right: none; border-top: 1px solid var(--border); padding: 0; align-items: center; justify-content: space-between; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
@@ -253,14 +251,13 @@
     .nav, .nav-section, .sidebar-bottom { display: contents; } 
     
     .nav-item, .config-btn { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; margin: 0; align-items: center; justify-content: center; flex: 1; border-radius: 0; position: relative; }
-    .nav-item.active { box-shadow: none; background: transparent; color: var(--orange-light); }
+    .nav-item.active, .config-btn.active { box-shadow: none; background: transparent; color: var(--orange-light); }
     .nav-item .icon, .config-btn .icon { font-size: 24px; margin-bottom: 2px; transition: transform 0.2s; } 
-    .nav-item.active .icon { transform: translateY(-2px); }
+    .nav-item.active .icon, .config-btn.active .icon { transform: translateY(-2px); }
     
     .nav-item span:not(.icon):not(.nav-badge), .config-btn span:not(.icon) { font-size: 10px; display: block; font-weight: 600; text-align: center; line-height: 1; }
     .nav-badge { position: absolute; top: 4px; left: 50%; transform: translateX(4px); margin: 0; padding: 2px 5px; font-size: 9px; line-height: 1; border-radius: 10px; }
     
-    /* Ocultar botões extras na bottom nav para manter simetria */
     .sidebar-bottom .theme-toggle-btn { display: none; }
 
     .main { margin-left: 0; padding: 16px; padding-bottom: calc(100px + env(safe-area-inset-bottom)); width: 100%; }
@@ -391,8 +388,23 @@
           <div class="card" style="margin-bottom:24px">
             <div class="section-title">📄 Identificação</div>
             <div class="field-group">
-              <div class="field"><label>Nome do Modelo</label><input type="text" class="std-input" id="c-name" placeholder="Ex: Cortador de Biscoito"></div>
-              <div class="field"><label>Categoria</label><select id="c-cat" class="std-input"><option value="miniatura">Cortador</option><option value="funcional">Carimbo</option><option value="decorativo">Marcador</option><option value="outro">Outro</option></select></div>
+              <div class="field"><label>Nome do Modelo</label><input type="text" class="std-input" id="c-name" placeholder="Ex: Chaveiro Personalizado"></div>
+              <div class="field">
+                <label>Categoria</label>
+                <select id="c-cat" class="std-input" onchange="calcCost()">
+                  <option value="chaveiro">Chaveiro</option>
+                  <option value="decorativo">Decoração</option>
+                  <option value="miniatura">Miniaturas</option>
+                  <option value="infantil">Infantil / Brinquedo</option>
+                  <option value="cortador">Cortador</option>
+                  <option value="funcional">Carimbo</option>
+                  <option value="marcador">Marcador</option>
+                  <option value="topo_bolo">Topo de Bolo / Festa</option>
+                  <option value="lembrancinha">Lembrancinha</option>
+                  <option value="utilitario">Utilitário / Suporte</option>
+                  <option value="outro">Outro</option>
+                </select>
+              </div>
             </div>
             <div class="field-group single"><div class="field"><label>Descrição</label><textarea id="c-desc" class="std-input" placeholder="Adicione notas..."></textarea></div></div>
             <div class="field-group">
@@ -442,7 +454,7 @@
             </div>
             <div class="field-group">
               <div class="field"><label>Embalagem</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="c-pack" value="2" step="0.5" oninput="calcCost()"></div></div>
-              <div class="field"><label>Extras (Tinta, etc)</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="c-extra" value="0" step="0.5" oninput="calcCost()"></div></div>
+              <div class="field"><label>Extras (Argola, Tinta, etc)</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="c-extra" value="0" step="0.5" oninput="calcCost()"></div></div>
             </div>
           </div>
 
@@ -476,11 +488,11 @@
             <div class="result-row"><div class="r-label"><div class="r-dot" style="background:var(--yellow)"></div>Energia</div><div class="r-val" id="res-energy">R$ 0,00</div></div>
             <div class="result-row"><div class="r-label"><div class="r-dot" style="background:var(--teal)"></div>Mão de Obra</div><div class="r-val" id="res-labor">R$ 0,00</div></div>
             <div class="result-row"><div class="r-label"><div class="r-dot" style="background:#6366f1"></div>Depreciação</div><div class="r-val" id="res-dep">R$ 0,00</div></div>
-            <div class="result-row"><div class="r-label"><div class="r-dot" style="background:var(--red)"></div>Falha/Suporte</div><div class="r-val" id="res-fail">R$ 0,00</div></div>
+            <div class="result-row"><div class="r-label"><div class="r-dot" style="background:var(--red)"></div>Risco Falha</div><div class="r-val" id="res-fail">R$ 0,00</div></div>
             <div class="result-row"><div class="r-label"><div class="r-dot" style="background:#8b5cf6"></div>Extras</div><div class="r-val" id="res-extra">R$ 0,00</div></div>
             <div class="result-row"><div class="r-label"><div class="r-dot" style="background:#60a5fa"></div>Manutenção</div><div class="r-val" id="res-maint">R$ 0,00</div></div>
 
-            <div class="result-total"><div class="result-total-label">Custo Base de Produção</div><div class="result-total-val" id="res-total">R$ 0,00</div><div class="result-total-sub">Sem lucro aplicado.</div></div>
+            <div class="result-total"><div class="result-total-label">Custo Base de Produção</div><div class="result-total-val" id="res-total">R$ 0,00</div><div class="result-total-sub">Sem lucro ou taxas.</div></div>
             <div style="margin-top:32px; display: flex; align-items: center; gap: 20px;">
               <svg width="80" height="80" viewBox="0 0 80 80" id="donut-svg"></svg>
               <div id="donut-legend" style="flex:1;"></div>
@@ -499,7 +511,20 @@
       <div class="page-header"><div class="page-title">Sua Biblioteca</div></div>
       <div class="card" style="margin-bottom: 24px; display:flex; gap:12px; flex-wrap:wrap; padding: 16px;">
         <input type="text" class="std-input" style="flex:1; min-width: 200px;" id="model-search" placeholder="Buscar..." oninput="renderModels()">
-        <select id="model-filter-cat" class="std-input" style="width:auto;" onchange="renderModels()"><option value="">Todas</option><option value="miniatura">Cortadores</option><option value="funcional">Carimbos</option><option value="decorativo">Marcadores</option></select>
+        <select id="model-filter-cat" class="std-input" style="width:auto;" onchange="renderModels()">
+          <option value="">Todas as Categorias</option>
+          <option value="chaveiro">Chaveiros</option>
+          <option value="decorativo">Decoração</option>
+          <option value="miniatura">Miniaturas</option>
+          <option value="infantil">Infantil / Brinquedos</option>
+          <option value="cortador">Cortadores</option>
+          <option value="funcional">Carimbos</option>
+          <option value="marcador">Marcadores</option>
+          <option value="topo_bolo">Topo de Bolo / Festa</option>
+          <option value="lembrancinha">Lembrancinhas</option>
+          <option value="utilitario">Utilitários / Suportes</option>
+          <option value="outro">Outros</option>
+        </select>
         <button class="btn btn-primary" onclick="navigate('calc')">+ Novo</button>
       </div>
       <div class="models-grid" id="models-grid"></div>
@@ -544,7 +569,7 @@
 <!-- Modal Edit -->
 <div class="modal-overlay" id="modal-edit">
   <div class="modal">
-    <div class="modal-title">✏️ Atualizar Modelo</div>
+    <div class="modal-title" style="font-family:'Outfit';font-weight:800;font-size:20px;margin-bottom:20px;">✏️ Atualizar Modelo</div>
     <input type="hidden" id="edit-id">
     <div class="field" style="margin-bottom:24px">
       <label>Imagem da peça</label>
@@ -555,7 +580,25 @@
         <button class="photo-remove-btn" id="edit-photo-remove" style="display:none" onclick="removeEditPhoto(event)">✕ Remover</button>
       </div>
     </div>
-    <div class="field-group"><div class="field"><label>Nome</label><input type="text" class="std-input" id="edit-name"></div><div class="field"><label>Categoria</label><select class="std-input" id="edit-cat"><option value="miniatura">Miniatura</option><option value="funcional">Funcional</option><option value="decorativo">Decorativo</option><option value="outro">Outros</option></select></div></div>
+    <div class="field-group">
+      <div class="field"><label>Nome</label><input type="text" class="std-input" id="edit-name"></div>
+      <div class="field">
+        <label>Categoria</label>
+        <select class="std-input" id="edit-cat">
+          <option value="chaveiro">Chaveiro</option>
+          <option value="decorativo">Decoração</option>
+          <option value="miniatura">Miniaturas</option>
+          <option value="infantil">Infantil / Brinquedo</option>
+          <option value="cortador">Cortador</option>
+          <option value="funcional">Carimbo</option>
+          <option value="marcador">Marcador</option>
+          <option value="topo_bolo">Topo de Bolo / Festa</option>
+          <option value="lembrancinha">Lembrancinha</option>
+          <option value="utilitario">Utilitário / Suporte</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+    </div>
     <div class="field-group"><div class="field"><label>Custo Base</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="edit-cost" step="0.01"></div></div><div class="field"><label>Preço Sugerido</label><div class="input-with-unit"><span class="unit">R$</span><input type="number" id="edit-price" step="0.01"></div></div></div>
     <div class="btn-row" style="margin-top: 32px;"><button class="btn btn-primary" onclick="saveEdit()" style="flex:1">Salvar Alterações</button><button class="btn btn-ghost" onclick="closeModal('modal-edit')" style="flex:1">Cancelar</button></div>
   </div>
@@ -573,9 +616,6 @@ if(localStorage.getItem('amorah-theme') === 'light') {
     document.body.classList.add('light-mode');
     document.getElementById('meta-theme-color')?.setAttribute('content', '#f8fafc');
 }
-
-const manifestJSON = { "name": "Amorah 3DCalc", "short_name": "Amorah3D", "start_url": ".", "display": "standalone", "background_color": "#0f172a", "theme_color": "#0f172a", "orientation": "portrait", "icons": [{ "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230f172a'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='sans-serif' font-weight='800' font-size='200' fill='%23ec4899'%3EA3D%3C/text%3E%3C/svg%3E", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }] };
-document.querySelector('#pwa-manifest').setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifestJSON)));
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously, signInWithCustomToken, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -609,6 +649,20 @@ const fmtDate = d => new Date(d).toLocaleDateString('pt-BR');
 const num = id => parseFloat(document.getElementById(id)?.value) || 0;
 const id = v => document.getElementById(v);
 
+const catLabels = {
+  chaveiro: 'Chaveiro',
+  decorativo: 'Decoração',
+  miniatura: 'Miniaturas',
+  infantil: 'Infantil',
+  cortador: 'Cortador',
+  funcional: 'Carimbo',
+  marcador: 'Marcador',
+  topo_bolo: 'Topo de Bolo',
+  lembrancinha: 'Lembrancinha',
+  utilitario: 'Utilitário',
+  outro: 'Outro'
+};
+
 window.fmt = fmt; window.fmtShort = fmtShort; window.fmtDate = fmtDate; window.num = num; window.id = id;
 
 window.loginWithGoogle = async () => {
@@ -634,10 +688,11 @@ const initAuth = async () => {
         console.warn("Falha no token customizado, usando anônimo.", tokenError);
         await signInAnonymously(auth);
       }
+    } else if (isPreview) {
+      await signInAnonymously(auth);
     } else {
-        // Agora requeremos o login Google em produção. O loader ficará oculto para mostrar o botão.
-        hideLoader();
-        document.getElementById('login-screen').style.display = 'flex';
+      hideLoader();
+      document.getElementById('login-screen').style.display = 'flex';
     }
   } catch(e) { console.error("Auth error:", e); hideLoader(); } 
 };
@@ -668,16 +723,45 @@ initAuth();
 window.showToast = function(msg, type = 'success') { const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<span class="t-icon">${type==='success'?'✓':'✕'}</span><span>${msg}</span>`; document.body.appendChild(t); setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(20px)'; setTimeout(() => t.remove(), 400); }, 3500); }
 window.closeModal = function(mid) { id(mid).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(el => { el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); }); });
-window.navigate = function(page) { document.querySelectorAll('.page, .nav-item').forEach(x => x.classList.remove('active')); id('page-' + page).classList.add('active'); document.querySelectorAll(`.nav-item[onclick*="${page}"]`).forEach(n => n.classList.add('active')); if (page === 'dashboard') window.renderDashboard(); if (page === 'models') window.renderModels(); if (page === 'sales') window.renderSales(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+window.navigate = function(page) { 
+  document.querySelectorAll('.page, .nav-item, .config-btn').forEach(x => x.classList.remove('active')); 
+  id('page-' + page).classList.add('active'); 
+  document.querySelectorAll(`.nav-item[onclick*="${page}"], .config-btn[onclick*="${page}"]`).forEach(n => n.classList.add('active')); 
+  if (page === 'dashboard') window.renderDashboard(); 
+  if (page === 'models') window.renderModels(); 
+  if (page === 'sales') window.renderSales(); 
+  window.scrollTo({ top: 0, behavior: 'smooth' }); 
+}
 
 window.calcCost = function() {
-  const w = num('c-weight'); const fp = num('c-fil-price'); const fail = num('c-fail')/100; const sup = num('c-support')/100; const t = num('c-time'); const p = num('c-watts'); const k = num('c-kwh'); const lt = num('c-labor-time'); const lr = num('c-labor-rate'); const pk = num('c-pack'); const ex = num('c-extra'); const pv = num('c-printer-val'); const pl = num('c-printer-life'); const mn = num('c-maint'); const mg = num('c-margin')/100;
-  const fb = (w/1000)*fp; const ft = (fb+(fb*sup))*(1+fail); const ec = (p/1000)*t*k; const lc = lt*lr; const dc = (pv/pl)*t; const fc = fb*fail; const xc = pk+ex; const mc = (mn/176)*t;
-  const total = ft+ec+lc+dc+fc+xc+mc; const finalPrice = total/(1-mg);
+  const w = num('c-weight'); const fp = num('c-fil-price'); const fail = num('c-fail')/100; const sup = num('c-support')/100; const t = num('c-time'); const p = num('c-watts'); const k = num('c-kwh'); const lt = num('c-labor-time'); const lr = num('c-labor-rate'); const pk = num('c-pack'); const ex = num('c-extra'); const pv = num('c-printer-val'); const pl = num('c-printer-life') || 20000; const mn = num('c-maint'); const mg = num('c-margin')/100; const plat = num('c-platform')/100;
+  
+  const filType = id('c-fil-type')?.value || 'PLA';
+  if(id('res-filtype')) id('res-filtype').textContent = filType;
+
+  const fb = (w/1000)*fp; 
+  const ft = fb * (1 + sup); 
+  const fc = ft * fail;      
+  const ec = (p/1000)*t*k; 
+  const lc = lt*lr; 
+  const dc = (pv/pl)*t; 
+  const xc = pk+ex; 
+  const mc = (mn/176)*t;
+  
+  const total = ft+ec+lc+dc+fc+xc+mc; 
+  
+  const calcPrice = (cost, marginRate, platRate) => {
+    const divisor = 1 - marginRate - platRate;
+    return divisor > 0.05 ? cost / divisor : cost / 0.05;
+  };
+  
+  const finalPrice = calcPrice(total, mg, plat);
 
   id('res-fil').textContent = fmt(ft); id('res-energy').textContent = fmt(ec); id('res-labor').textContent = fmt(lc); id('res-dep').textContent = fmt(dc); id('res-fail').textContent = fmt(fc); id('res-extra').textContent = fmt(xc); id('res-maint').textContent = fmt(mc); id('res-total').textContent = fmt(total);
 
-  id('price-suggestion').innerHTML = [{l:'20%',p:0.2,c:'margin-20'},{l:'30%',p:0.3,c:'margin-30'},{l:'50%',p:0.5,c:'margin-50'}].map(x => `<div class="price-row ${x.c}"><span class="p-label">Margem ${x.l}</span><span class="p-val">${fmt(total/(1-x.p))}</span></div>`).join('') + `<div class="price-row" style="background:var(--orange-glow); border:1px solid rgba(236, 72, 153, 0.3)"><span class="p-label" style="color:var(--orange-light)">Alvo ${(mg*100).toFixed(0)}%</span><span class="p-val" style="color:var(--orange)">${fmt(finalPrice)}</span></div>`;
+  const platLabel = plat > 0 ? ` (+${(plat*100).toFixed(0)}% taxa)` : '';
+  id('price-suggestion').innerHTML = [{l:'20%',p:0.2,c:'margin-20'},{l:'30%',p:0.3,c:'margin-30'},{l:'50%',p:0.5,c:'margin-50'}].map(x => `<div class="price-row ${x.c}"><span class="p-label">Margem ${x.l}${platLabel}</span><span class="p-val">${fmt(calcPrice(total, x.p, plat))}</span></div>`).join('') + `<div class="price-row" style="background:var(--orange-glow); border:1px solid rgba(236, 72, 153, 0.3)"><span class="p-label" style="color:var(--orange-light)">Alvo ${(mg*100).toFixed(0)}%${platLabel}</span><span class="p-val" style="color:var(--orange)">${fmt(finalPrice)}</span></div>`;
 
   const parts = [ { l: 'Fil.', v: ft, c: '#ec4899' }, { l: 'Energia', v: ec, c: '#f59e0b' }, { l: 'Labor', v: lc, c: '#be185d' }, { l: 'Deprec.', v: dc, c: '#6366f1' }, { l: 'Falha', v: fc, c: '#ef4444' } ].filter(x => x.v > 0);
   if(total > 0) {
@@ -687,7 +771,7 @@ window.calcCost = function() {
     id('donut-legend').innerHTML = parts.map(x => `<div style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:6px"><div style="width:10px;height:10px;border-radius:3px;background:${x.c}"></div><span style="color:var(--text-secondary);flex:1">${x.l}</span><b style="font-family:'JetBrains Mono'">${((x.v/total)*100).toFixed(0)}%</b></div>`).join('');
   }
   
-  window.currentCalcData = { name: id('c-name').value || 'Peça Personalizada', cat: id('c-cat').options[id('c-cat').selectedIndex].text, material: id('c-fil-type').value, weight: w, desc: id('c-desc').value || 'Sem descrição.', costBase: ft + ec + mc + dc + fc, labor: lc, extra: xc, totalPrice: finalPrice };
+  window.currentCalcData = { name: id('c-name').value || 'Peça Personalizada', cat: id('c-cat').options[id('c-cat').selectedIndex].text, material: filType, weight: w, desc: id('c-desc').value || 'Sem descrição.', costBase: ft + ec + mc + dc + fc, labor: lc, extra: xc, totalPrice: finalPrice };
   return { total, suggestedPrice: finalPrice };
 }
 
@@ -702,35 +786,143 @@ window.generatePDF = function() {
     html2pdf().set({ margin: 0, filename: `Orcamento_${data.name.replace(/\\s+/g, '_')}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save().then(() => { element.style.top = '-9999px'; element.style.left = '-9999px'; });
 }
 
-window.clearCalc = function() { ['c-name','c-desc','c-link'].forEach(f => { if(id(f)) id(f).value = ''; }); id('c-photo-preview').style.display = 'none'; id('photo-upload-area').classList.remove('has-photo'); id('photo-remove-btn').style.display='none'; id('photo-upload-placeholder').style.display='flex'; currentPhoto = null; applyConfigToCalc(); }
+window.clearCalc = function() { 
+  ['c-name','c-desc','c-link'].forEach(f => { if(id(f)) id(f).value = ''; }); 
+  if(id('c-cat')) id('c-cat').value = 'chaveiro';
+  if(id('c-link-source')) id('c-link-source').value = '';
+  if(id('c-weight')) id('c-weight').value = 50;
+  if(id('c-fil-price')) id('c-fil-price').value = 100;
+  if(id('c-fil-type')) id('c-fil-type').value = 'PLA';
+  if(id('c-fail')) { id('c-fail').value = window.config.fail ?? 5; id('c-fail-val').textContent = id('c-fail').value + '%'; }
+  if(id('c-support')) { id('c-support').value = 0; id('c-support-val').textContent = '0%'; }
+  if(id('c-time')) id('c-time').value = 3;
+  if(id('c-labor-time')) id('c-labor-time').value = 0.5;
+  if(id('c-pack')) id('c-pack').value = 2;
+  if(id('c-extra')) id('c-extra').value = 0;
+  if(id('c-platform')) { id('c-platform').value = 0; id('c-platform-val').textContent = '0%'; }
+  
+  id('c-photo-preview').src = '';
+  id('c-photo-preview').style.display = 'none'; 
+  id('photo-upload-area').classList.remove('has-photo'); 
+  id('photo-remove-btn').style.display = 'none'; 
+  id('photo-upload-placeholder').style.display = 'flex'; 
+  if(id('c-photo-input')) id('c-photo-input').value = '';
+  currentPhoto = null; 
+  applyConfigToCalc(); 
+}
+
 window.saveModel = async function() {
   if (!userId) return window.showToast('Aguarde...', 'error'); const name = id('c-name').value.trim(); if (!name) return window.showToast('Falta nome!', 'error');
   const costs = window.calcCost(); const modelId = Date.now().toString();
-  const model = { id: parseInt(modelId), name, cat: id('c-cat').value, desc: id('c-desc').value, filType: id('c-fil-type').value, photo: currentPhoto, cost: costs.total, suggestedPrice: costs.suggestedPrice, weight: num('c-weight'), time: num('c-time'), createdAt: new Date().toISOString(), params: { weight: num('c-weight'), filPrice: num('c-fil-price'), filType: id('c-fil-type').value, fail: num('c-fail'), support: num('c-support'), time: num('c-time'), watts: num('c-watts'), kwh: num('c-kwh'), laborTime: num('c-labor-time'), laborRate: num('c-labor-rate'), pack: num('c-pack'), extra: num('c-extra'), printerVal: num('c-printer-val'), printerLife: num('c-printer-life'), maint: num('c-maint'), margin: num('c-margin') } };
-  try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'models', modelId), model); window.showToast('Salvo!', 'success'); window.navigate('models'); } catch (e) { window.showToast('Erro', 'error'); console.error(e); }
+  const model = { 
+    id: parseInt(modelId), name, cat: id('c-cat').value, desc: id('c-desc').value, 
+    link: id('c-link').value, linkSource: id('c-link-source').value,
+    filType: id('c-fil-type').value, photo: currentPhoto, cost: costs.total, suggestedPrice: costs.suggestedPrice, weight: num('c-weight'), time: num('c-time'), createdAt: new Date().toISOString(), 
+    params: { weight: num('c-weight'), filPrice: num('c-fil-price'), filType: id('c-fil-type').value, fail: num('c-fail'), support: num('c-support'), time: num('c-time'), watts: num('c-watts'), kwh: num('c-kwh'), laborTime: num('c-labor-time'), laborRate: num('c-labor-rate'), pack: num('c-pack'), extra: num('c-extra'), printerVal: num('c-printer-val'), printerLife: num('c-printer-life'), maint: num('c-maint'), margin: num('c-margin'), platform: num('c-platform') } 
+  };
+  try { 
+    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'models', modelId), model); 
+    window.clearCalc(); 
+    window.showToast('Salvo!', 'success'); 
+    window.navigate('models'); 
+  } catch (e) { window.showToast('Erro', 'error'); console.error(e); }
 }
 
 window.renderModels = function() {
   const s = id('model-search')?.value.toLowerCase() || ''; const c = id('model-filter-cat')?.value || '';
   let list = window.models.filter(m => (!s || m.name.toLowerCase().includes(s)) && (!c || m.cat === c));
   if (list.length === 0) { id('models-grid').innerHTML = `<div class="empty-state">Nenhum modelo.</div>`; return; }
-  id('models-grid').innerHTML = list.map(m => `<div class="model-card">${m.photo ? `<img class="model-thumb" src="${m.photo}">` : `<div class="model-thumb-placeholder">🧊</div>`}<div style="font-weight:700;font-size:16px;margin-bottom:12px;display:flex;justify-content:space-between"><span>${m.name}</span><button class="btn-ghost btn-sm" style="padding:4px" onclick="openEditModal(${m.id})">✏️</button></div><div style="display:flex;gap:12px;margin-bottom:16px"><div style="flex:1;background:var(--bg-elevated);padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:var(--text-secondary)">Custo</div><b>${fmt(m.cost)}</b></div><div style="flex:1;background:var(--teal-glow);color:var(--teal);padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px">Venda</div><b>${fmt(m.suggestedPrice)}</b></div></div><div style="display:flex;gap:8px;margin-top:auto"><button class="btn btn-primary btn-sm" style="flex:1" onclick="loadModel(${m.id})">Abrir na Calc</button><button class="btn btn-danger btn-sm" onclick="deleteModel(${m.id})">🗑</button></div></div>`).join('');
+  id('models-grid').innerHTML = list.map(m => `<div class="model-card">${m.photo ? `<img class="model-thumb" src="${m.photo}">` : `<div class="model-thumb-placeholder">🧊</div>`}<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span class="chip chip-orange" style="font-size:10px;padding:2px 8px">${catLabels[m.cat] || m.cat || 'Outro'}</span><button class="btn-ghost btn-sm" style="padding:4px" onclick="openEditModal(${m.id})">✏️</button></div><div style="font-weight:700;font-size:16px;margin-bottom:12px">${m.name}</div><div style="display:flex;gap:12px;margin-bottom:16px"><div style="flex:1;background:var(--bg-elevated);padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:var(--text-secondary)">Custo</div><b>${fmt(m.cost)}</b></div><div style="flex:1;background:var(--teal-glow);color:var(--teal);padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px">Venda</div><b>${fmt(m.suggestedPrice)}</b></div></div><div style="display:flex;gap:8px;margin-top:auto"><button class="btn btn-primary btn-sm" style="flex:1" onclick="loadModel(${m.id})">Abrir na Calc</button><button class="btn btn-danger btn-sm" onclick="deleteModel(${m.id})">🗑</button></div></div>`).join('');
 }
 window.openEditModal = function(mid) { const m = window.models.find(x => x.id === mid); if (!m) return; id('edit-id').value = m.id; id('edit-name').value = m.name; id('edit-cat').value = m.cat; id('edit-cost').value = m.cost.toFixed(2); id('edit-price').value = m.suggestedPrice.toFixed(2); if (m.photo) { id('edit-photo-preview').src = m.photo; id('edit-photo-preview').style.display = 'block'; id('edit-photo-area').classList.add('has-photo'); id('edit-photo-placeholder').style.display = 'none'; id('edit-photo-remove').style.display = 'block'; editCurrentPhoto = m.photo; } else { id('edit-photo-preview').src = ''; id('edit-photo-preview').style.display = 'none'; id('edit-photo-area').classList.remove('has-photo'); id('edit-photo-placeholder').style.display = 'flex'; id('edit-photo-remove').style.display = 'none'; editCurrentPhoto = null; } id('modal-edit').classList.add('open'); }
 window.saveEdit = async function() { if (!userId) return; const mid = parseInt(id('edit-id').value); const m = window.models.find(x => x.id === mid); if (!m) return; const um = { ...m, name: id('edit-name').value.trim() || m.name, cat: id('edit-cat').value, cost: parseFloat(id('edit-cost').value) || m.cost, suggestedPrice: parseFloat(id('edit-price').value) || m.suggestedPrice, photo: editCurrentPhoto }; try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'models', mid.toString()), um); window.closeModal('modal-edit'); window.showToast('Atualizado!', 'success'); } catch(e) { window.showToast('Erro', 'error'); console.error(e); } }
-window.loadModel = function(mid) { const m = window.models.find(x => x.id === mid); if (!m || !m.params) return; id('c-name').value = m.name; id('c-cat').value = m.cat; id('c-weight').value = m.params.weight; id('c-time').value = m.params.time; id('c-margin').value = m.params.margin; if(m.photo){ id('c-photo-preview').src = m.photo; id('c-photo-preview').style.display = 'block'; id('photo-upload-area').classList.add('has-photo'); id('photo-upload-placeholder').style.display='none'; id('photo-remove-btn').style.display='block'; currentPhoto = m.photo; } window.navigate('calc'); window.calcCost(); }
+
+window.loadModel = function(mid) { 
+  const m = window.models.find(x => x.id === mid); if (!m || !m.params) return; 
+  id('c-name').value = m.name || ''; 
+  id('c-cat').value = m.cat || 'chaveiro'; 
+  id('c-desc').value = m.desc || '';
+  id('c-link').value = m.link || '';
+  id('c-link-source').value = m.linkSource || '';
+  
+  id('c-weight').value = m.params.weight ?? 50; 
+  id('c-fil-price').value = m.params.filPrice ?? 100;
+  id('c-fil-type').value = m.params.filType || m.filType || 'PLA';
+  
+  id('c-fail').value = m.params.fail ?? 5;
+  id('c-fail-val').textContent = id('c-fail').value + '%';
+  
+  id('c-support').value = m.params.support ?? 0;
+  id('c-support-val').textContent = id('c-support').value + '%';
+  
+  id('c-time').value = m.params.time ?? 3; 
+  id('c-watts').value = m.params.watts ?? window.config.watts;
+  id('c-kwh').value = m.params.kwh ?? window.config.kwh;
+  
+  id('c-labor-time').value = m.params.laborTime ?? 0.5;
+  id('c-labor-rate').value = m.params.laborRate ?? window.config.labor;
+  id('c-pack').value = m.params.pack ?? 2;
+  id('c-extra').value = m.params.extra ?? 0;
+  
+  id('c-printer-val').value = m.params.printerVal ?? window.config.printerVal;
+  id('c-printer-life').value = m.params.printerLife ?? window.config.printerLife;
+  id('c-maint').value = m.params.maint ?? window.config.maint;
+  
+  id('c-margin').value = m.params.margin ?? window.config.margin; 
+  id('c-margin-val').textContent = id('c-margin').value + '%';
+  
+  id('c-platform').value = m.params.platform ?? 0;
+  id('c-platform-val').textContent = id('c-platform').value + '%';
+
+  if (m.photo) { 
+    id('c-photo-preview').src = m.photo; 
+    id('c-photo-preview').style.display = 'block'; 
+    id('photo-upload-area').classList.add('has-photo'); 
+    id('photo-upload-placeholder').style.display = 'none'; 
+    id('photo-remove-btn').style.display = 'block'; 
+    currentPhoto = m.photo; 
+  } else {
+    id('c-photo-preview').src = '';
+    id('c-photo-preview').style.display = 'none';
+    id('photo-upload-area').classList.remove('has-photo');
+    id('photo-upload-placeholder').style.display = 'flex';
+    id('photo-remove-btn').style.display = 'none';
+    currentPhoto = null;
+  }
+  window.navigate('calc'); 
+  window.calcCost(); 
+}
+
 window.deleteModel = async function(mid) { if (!userId || !confirm('Excluir?')) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'models', mid.toString())); window.showToast('Removido.', 'success'); } catch(e) { console.error(e); } }
 
-function populateSaleSelect() { const sel = id('s-model'); sel.innerHTML = window.models.length ? window.models.map(m => `<option value="${m.id}">${m.name}</option>`).join('') : '<option value="">Sem modelos</option>'; if (window.models.length > 0) id('s-price').value = window.models[0].suggestedPrice.toFixed(2); sel.onchange = () => { const m = window.models.find(x => x.id == sel.value); if (m) { id('s-price').value = m.suggestedPrice.toFixed(2); window.updateSalePreview(); } }; }
+function populateSaleSelect() { const sel = id('s-model'); sel.innerHTML = window.models.length ? window.models.map(m => `<option value="${m.id}">${m.name}</option>`).join('') : '<option value="">Sem modelos</option>'; if (window.models.length > 0) { id('s-price').value = window.models[0].suggestedPrice.toFixed(2); window.updateSalePreview(); } sel.onchange = () => { const m = window.models.find(x => x.id == sel.value); if (m) { id('s-price').value = m.suggestedPrice.toFixed(2); window.updateSalePreview(); } }; }
 window.updateSalePreview = function() { const m = window.models.find(x => x.id == id('s-model')?.value); const q = num('s-qty'); const p = num('s-price'); if (!m) return; id('sp-revenue').textContent = fmt(p*q); id('sp-cost').textContent = fmt(m.cost*q); id('sp-profit').textContent = fmt((p-m.cost)*q); id('sale-preview').style.display = 'block'; }
 window.registerSale = async function() { if (!userId) return; const mId = id('s-model')?.value; if(!mId) return; const m = window.models.find(x => x.id == mId); const q = num('s-qty'); const p = num('s-price'); const sale = { id: Date.now(), modelId: mId, modelName: m.name, qty: q, price: p, date: id('s-date').value, channel: id('s-channel').value, cost: m.cost, profit: (p-m.cost)*q, revenue: p*q }; try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sales', sale.id.toString()), sale); window.showToast('Venda Registrada!', 'success'); } catch(e) { console.error(e); } }
-window.renderSales = function() { if (window.sales.length === 0) { id('sales-table-wrap').innerHTML = `<div class="empty-state">Sem vendas.</div>`; return; } id('sales-table-wrap').innerHTML = `<div class="sales-list">${window.sales.map(s => `<div class="sale-card"><div class="sc-header"><div class="sc-date">${fmtDate(s.date)}</div><div class="chip chip-orange">${s.channel}</div></div><div class="sc-title">${s.modelName} <span class="sc-qty">x${s.qty}</span></div><div class="sc-finance"><div><small>Receita</small><b>${fmt(s.revenue)}</b></div><div style="text-align:right"><small>Lucro</small><b class="${s.profit>=0?'td-green':'td-red'}">${s.profit>=0?'+':''}${fmt(s.profit)}</b></div></div><button class="btn btn-ghost btn-sm" style="width:100%; margin-top:8px" onclick="deleteSale(${s.id})">Anular</button></div>`).join('')}</div>`; }
+window.renderSales = function() { if (id('sales-count-label')) id('sales-count-label').textContent = window.sales.length + ' reg.'; if (window.sales.length === 0) { id('sales-table-wrap').innerHTML = `<div class="empty-state">Sem vendas.</div>`; return; } id('sales-table-wrap').innerHTML = `<div class="sales-list">${window.sales.map(s => `<div class="sale-card"><div class="sc-header"><div class="sc-date">${fmtDate(s.date)}</div><div class="chip chip-orange">${s.channel}</div></div><div class="sc-title">${s.modelName} <span class="sc-qty">x${s.qty}</span></div><div class="sc-finance"><div><small>Receita</small><b>${fmt(s.revenue)}</b></div><div style="text-align:right"><small>Lucro</small><b class="${s.profit>=0?'td-green':'td-red'}">${s.profit>=0?'+':''}${fmt(s.profit)}</b></div></div><button class="btn btn-ghost btn-sm" style="width:100%; margin-top:8px" onclick="deleteSale(${s.id})">Anular</button></div>`).join('')}</div>`; }
 window.deleteSale = async function(saleId) { if (!userId || !confirm('Remover venda?')) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sales', saleId.toString())); window.showToast('Removido.', 'success'); } catch(e) { console.error(e); } }
 
-window.renderDashboard = function() { id('dash-models').textContent = window.models.length; id('dash-revenue').textContent = fmtShort(window.sales.reduce((a, s) => a + s.revenue, 0)); id('dash-profit').textContent = fmtShort(window.sales.reduce((a, s) => a + s.profit, 0)); id('dash-units').textContent = window.sales.reduce((a, s) => a + s.qty, 0); const rec = window.sales.slice(0, 5); id('dash-sales-list').innerHTML = rec.length ? rec.map(s => `<div style="padding:16px; margin-bottom:12px; border-radius:var(--radius-md); background:var(--bg-elevated); border:1px solid var(--border); display:flex; justify-content:space-between"><div><b style="font-size:15px">${s.modelName}</b> (x${s.qty})<div style="font-size:12px;color:var(--text-tertiary);margin-top:4px">${fmtDate(s.date)}</div></div><b style="color:var(--teal)">${fmt(s.revenue)}</b></div>`).join('') : '<div class="empty-state">Sem vendas</div>'; }
+window.renderDashboard = function() { 
+  id('dash-models').textContent = window.models.length; 
+  id('dash-revenue').textContent = fmtShort(window.sales.reduce((a, s) => a + s.revenue, 0)); 
+  id('dash-profit').textContent = fmtShort(window.sales.reduce((a, s) => a + s.profit, 0)); 
+  id('dash-units').textContent = window.sales.reduce((a, s) => a + s.qty, 0); 
+  
+  const rec = window.sales.slice(0, 5); 
+  id('dash-sales-list').innerHTML = rec.length ? rec.map(s => `<div style="padding:16px; margin-bottom:12px; border-radius:var(--radius-md); background:var(--bg-elevated); border:1px solid var(--border); display:flex; justify-content:space-between"><div><b style="font-size:15px">${s.modelName}</b> (x${s.qty})<div style="font-size:12px;color:var(--text-tertiary);margin-top:4px">${fmtDate(s.date)}</div></div><b style="color:var(--teal)">${fmt(s.revenue)}</b></div>`).join('') : '<div class="empty-state">Sem vendas</div>'; 
+
+  const map = {};
+  window.sales.forEach(s => {
+    if (!map[s.modelName]) map[s.modelName] = { name: s.modelName, qty: 0, profit: 0 };
+    map[s.modelName].qty += s.qty;
+    map[s.modelName].profit += s.profit;
+  });
+  const top = Object.values(map).sort((a, b) => b.qty - a.qty).slice(0, 5);
+  id('dash-top-models').innerHTML = top.length ? top.map((m, idx) => `<div style="padding:16px; margin-bottom:12px; border-radius:var(--radius-md); background:var(--bg-elevated); border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center"><div><span class="chip chip-orange" style="margin-right:8px">#${idx+1}</span><b style="font-size:15px">${m.name}</b><div style="font-size:12px;color:var(--text-tertiary);margin-top:4px">${m.qty} unid. vendidas</div></div><b style="color:var(--orange)">${fmt(m.profit)}</b></div>`).join('') : '<div class="empty-state">Sem dados suficientes</div>';
+}
+
 window.loadConfig = function() { id('cfg-kwh').value = window.config.kwh; id('cfg-watts').value = window.config.watts; id('cfg-printer-val').value = window.config.printerVal; id('cfg-labor').value = window.config.labor; id('cfg-maint').value = window.config.maint; id('cfg-margin').value = window.config.margin; }
 window.saveConfig = async function() { if(!userId) return; const cfg = { kwh: num('cfg-kwh'), watts: num('cfg-watts'), printerVal: num('cfg-printer-val'), printerLife: 20000, labor: num('cfg-labor'), maint: num('cfg-maint'), margin: num('cfg-margin'), fail: 5 }; try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'config', 'settings'), cfg); window.showToast('Configurações Salvas', 'success'); } catch(e) { console.error(e); } }
-function applyConfigToCalc() { id('c-kwh').value = window.config.kwh; id('c-watts').value = window.config.watts; id('c-printer-val').value = window.config.printerVal; id('c-labor-rate').value = window.config.labor; id('c-margin').value = window.config.margin; window.calcCost(); }
+function applyConfigToCalc() { id('c-kwh').value = window.config.kwh; id('c-watts').value = window.config.watts; id('c-printer-val').value = window.config.printerVal; id('c-printer-life').value = window.config.printerLife || 20000; id('c-maint').value = window.config.maint; id('c-labor-rate').value = window.config.labor; id('c-margin').value = window.config.margin; if(id('c-margin-val')) id('c-margin-val').textContent = window.config.margin + '%'; window.calcCost(); }
 
 function handleImg(input, callback) {
   const file = input.files[0]; if (!file) return; const reader = new FileReader();
